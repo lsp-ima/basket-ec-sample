@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>STORE. 商品一覧</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+.lh{position:relative;height:420px;background:#000;color:#fff;overflow:hidden}
+.lh img{opacity:.6}
+.lh:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.8))}
+.lh div{position:absolute;left:0;right:0;bottom:0;z-index:2;max-width:1440px;margin:auto;padding:0 28px 40px}
+.lh .bc{font-size:11px;letter-spacing:.06em;color:#bbb;margin-bottom:14px}
+.lh h1{font-family:Anton;font-size:clamp(56px,9vw,120px);line-height:.9;text-transform:uppercase}
+.lh p{font-size:14px;color:#ddd;margin-top:12px}
+.tabs{border-bottom:1px solid var(--ln);background:#fff;position:sticky;top:62px;z-index:10}
+.tabs div{max-width:1440px;margin:auto;padding:0 28px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+.tabs a{padding:18px 0;font-size:13px;font-weight:700;white-space:nowrap;border-bottom:2px solid transparent;color:#666}
+.tabs a.on{color:var(--ink);border-color:var(--ac)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.cnt{font-size:13px;color:var(--sub)}
+.cnt b{font-family:Anton;font-size:22px;color:var(--ink);margin-right:4px;letter-spacing:.02em}
+.fl2{display:flex;gap:8px;flex-wrap:wrap}
+.fl2 button,.fl2 select{border:1px solid var(--ln);background:#fff;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:700;font-family:inherit;color:var(--ink)}
+.fl2 button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.empty{grid-column:1/-1;padding:80px 0;text-align:center;color:var(--sub)}
+.help{margin-top:72px;background:var(--off);border-radius:4px;padding:36px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.help b{display:block;font-size:18px;margin-bottom:4px}
+.help p{font-size:13px;color:#555}
+@media(max-width:900px){
+ .lh{height:300px}.lh div{padding:0 16px 28px}
+ .tabs{top:56px}.tabs div{padding:0 16px;gap:22px}
+ .help{padding:24px}
+}
+</style>
+</head>
+<body>
+<div id="hd"></div>
+<section class="lh"><img id="lhimg" src="" alt=""><div><p class="bc" id="bc"></p><h1 id="ttl"></h1><p id="lead"></p></div></section>
+<nav class="tabs"><div id="tabs"></div></nav>
+<section class="sec" style="padding-top:36px">
+ <div class="bar">
+  <p class="cnt" id="cnt"></p>
+  <div class="fl2">
+   <button data-b="">すべて</button><button data-b="UNDER ARMOUR">UNDER ARMOUR</button><button data-b="ASICS">ASICS</button>
+   <select id="sort"><option value="new">新着順</option><option value="low">価格の安い順</option><option value="high">価格の高い順</option></select>
+  </div>
+ </div>
+ <div class="grid" id="grid"></div>
+ <div class="help rv"><div><b>何を選べばいいか迷ったら</b><p>ポジション・足の形・予算を書くだけで、合う1足をスタッフが返します(サンプルのため送信されません)</p></div><a class="cta ac" href="#">相談する</a></div>
+</section>
+<div id="ft"></div>
+<script src="site.js"></script>
+<script>
+chrome();
+var q = new URLSearchParams(location.search);
+var g = q.get('g'), c = q.get('c'), isNew = q.get('new'), brand = q.get('b') || '';
+var sort = q.get('sort') || 'new'; document.getElementById('sort').value = sort;
+
+var head = g ? GEN[g] : c ? CAT[c] : null;
+document.getElementById('ttl').textContent = isNew ? 'New Arrivals' : head ? head.en : 'All Items';
+document.getElementById('lead').textContent = isNew ? '新着アイテム' : head ? (head.ja + (head.lead ? ' ── ' + head.lead : '')) : 'すべての商品';
+document.getElementById('lhimg').src = U(head ? head.img : 'hero.jpg', 1800);
+document.getElementById('bc').textContent = 'ホーム ／ ' + (isNew ? '新着' : head ? head.ja : 'すべて');
+document.title = 'STORE. ' + (isNew ? '新着' : head ? head.ja : '商品一覧');
+
+/* 上のタブ: 性別ページならカテゴリで、カテゴリページなら性別で絞る */
+var tabs = [['', 'すべて']];
+if (g) Object.keys(CAT).forEach(function (k) { tabs.push([k, CAT[k].ja]); });
+else Object.keys(GEN).forEach(function (k) { tabs.push([k, GEN[k].ja]); });
+var sub = '';
+document.getElementById('tabs').innerHTML = tabs.map(function (t, i) {
+  return '<a href="#" data-k="' + t[0] + '"' + (i === 0 ? ' class="on"' : '') + '>' + t[1] + '</a>';
+}).join('');
+document.querySelectorAll('#tabs a').forEach(function (a) {
+  a.onclick = function (e) {
+    e.preventDefault(); sub = a.dataset.k;
+    document.querySelectorAll('#tabs a').forEach(function (x) { x.classList.toggle('on', x === a); });
+    draw();
+  };
+});
+document.querySelectorAll('.fl2 button').forEach(function (b) {
+  b.classList.toggle('on', b.dataset.b === brand);
+  b.onclick = function () {
+    brand = b.dataset.b;
+    document.querySelectorAll('.fl2 button').forEach(function (x) { x.classList.toggle('on', x === b); });
+    draw();
+  };
+});
+document.getElementById('sort').onchange = function () { sort = this.value; draw(); };
+
+function draw() {
+  var list = P.filter(function (x) {
+    if (g && !inGender(x, g)) return false;
+    if (c && x.cat !== c) return false;
+    if (isNew && x.t !== 'NEW') return false;
+    if (brand && x.b !== brand) return false;
+    if (sub) { if (g) { if (x.cat !== sub) return false; } else if (!inGender(x, sub)) return false; }
+    return true;
+  });
+  if (sort === 'low') list.sort(function (a, b) { return a.p - b.p; });
+  if (sort === 'high') list.sort(function (a, b) { return b.p - a.p; });
+  document.getElementById('cnt').innerHTML = '<b>' + list.length + '</b>アイテム';
+  document.getElementById('grid').innerHTML = list.length ? list.map(card).join('') : '<p class="empty">条件に合う商品がありません</p>';
+  reveal();
+}
+draw();
+</script>
+</body>
+</html>

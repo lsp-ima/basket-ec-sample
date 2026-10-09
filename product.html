@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>STORE. 商品ページ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+.wrap{max-width:1440px;margin:auto;padding:20px 28px 0}
+.bc{font-size:11px;color:var(--sub);letter-spacing:.06em;margin-bottom:20px}
+.bc a:hover{color:var(--ink)}
+.main{display:grid;grid-template-columns:1.35fr 1fr;gap:56px;align-items:start}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gal figure{background:var(--off);aspect-ratio:4/5;overflow:hidden;border-radius:4px;position:relative}
+.gal figure.w{grid-column:1/3;aspect-ratio:16/11}
+.gal figure.w img{object-fit:contain}
+.gal .badge{top:14px;left:14px;font-size:12px;padding:4px 10px}
+.dots{display:none}
+.info{position:sticky;top:96px;padding-bottom:40px}
+.brand{font-size:12px;font-weight:900;letter-spacing:.16em;color:var(--sub)}
+h1{font-size:24px;font-weight:700;line-height:1.45;margin:8px 0 14px}
+.price{font-family:Anton;font-size:34px;letter-spacing:.02em}
+.price small{font-family:"Noto Sans JP";font-size:12px;color:var(--sub);font-weight:500;margin-left:6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tags span{font-size:11px;font-weight:700;background:var(--off);padding:5px 10px;border-radius:999px}
+.lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:900;letter-spacing:.06em;margin:28px 0 10px}
+.lbl em{font-style:normal;font-weight:500;color:var(--sub);letter-spacing:0}
+.lbl a{font-weight:700;color:var(--ac);border-bottom:1px solid var(--ac)}
+.colors{display:flex;gap:10px}
+.colors button{width:44px;height:44px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--ln)}
+.colors button.on{box-shadow:0 0 0 2px var(--ink)}
+.sizes{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sizes button{border:1px solid var(--ln);background:#fff;height:48px;border-radius:4px;font-size:14px;font-weight:500;position:relative;transition:.15s}
+.sizes button:hover{border-color:var(--ink)}
+.sizes button.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:700}
+.sizes button.out{color:#c4c4c4;background:linear-gradient(to top right,transparent calc(50% - .5px),#ddd,transparent calc(50% + .5px));cursor:not-allowed}
+.sizes button.few:after{content:"残1";position:absolute;top:-8px;right:-4px;background:var(--ac);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px}
+.notify{font-size:12px;color:var(--sub);margin-top:8px}
+.notify a{color:var(--ink);border-bottom:1px solid}
+.fit{border:1px solid var(--ln);border-radius:4px;padding:16px 18px;margin-top:14px}
+.fit h3{font-size:13px;font-weight:900;margin-bottom:4px}
+.fit p{font-size:13px;color:#555;line-height:1.7}
+.meter{margin-top:14px}
+.meter .bar{height:4px;background:var(--ln);border-radius:2px;position:relative}
+.meter .bar i{position:absolute;top:-5px;width:14px;height:14px;border-radius:50%;background:var(--ac)}
+.meter .lb{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:8px}
+.buy{display:flex;gap:8px;margin-top:24px}
+.cart{flex:1;background:var(--ac);color:#fff;border:0;height:58px;border-radius:999px;font-size:15px;font-weight:900;letter-spacing:.06em;transition:.2s}
+.cart:hover{background:#e04400}
+.fav2{width:58px;height:58px;border-radius:50%;border:1px solid var(--ln);background:#fff;font-size:20px}
+.pay{display:flex;justify-content:center;gap:14px;font-size:11px;color:var(--sub);margin-top:12px}
+.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:4px;overflow:hidden;margin-top:22px}
+.perks div{background:#fff;padding:14px 10px;text-align:center;font-size:11px;color:#666;line-height:1.5}
+.perks b{display:block;font-size:13px;color:var(--ink)}
+.perks b.ac{color:var(--ac)}
+details{border-bottom:1px solid var(--ln)}
+details:first-of-type{border-top:1px solid var(--ln);margin-top:28px}
+summary{list-style:none;display:flex;justify-content:space-between;padding:18px 0;font-size:14px;font-weight:700;cursor:pointer}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";font-size:18px;font-weight:400}
+details[open] summary:after{content:"−"}
+.dt{font-size:13px;line-height:1.9;color:#444;padding-bottom:18px}
+.spec{display:grid;grid-template-columns:110px 1fr;row-gap:8px;font-size:13px;padding-bottom:18px}
+.spec dt{color:var(--sub)}
+.story{background:var(--bk);color:#fff;margin-top:96px}
+.story .in{max-width:1440px;margin:auto;display:grid;grid-template-columns:1fr 1fr;min-height:520px}
+.story .tx{padding:72px 56px;display:flex;flex-direction:column;justify-content:center}
+.kick{font-size:12px;font-weight:900;letter-spacing:.2em;color:var(--ac);margin-bottom:14px}
+.story h2{font-family:Anton;font-size:clamp(40px,5vw,72px);line-height:.95;text-transform:uppercase}
+.story p{font-size:15px;line-height:1.9;color:#bbb;margin-top:20px;max-width:460px}
+.qform{display:grid;gap:10px;margin-top:22px}
+.qform input,.qform select{border:1px solid var(--ln);border-radius:4px;padding:12px;font:inherit;font-size:14px}
+.sticky{display:none}
+@media(max-width:900px){
+ .wrap{padding:12px 0 0}
+ .bc{padding:0 16px;margin-bottom:12px}
+ .main{grid-template-columns:1fr;gap:0}
+ .gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:0;scrollbar-width:none}
+ .gal figure,.gal figure.w{flex:0 0 100%;aspect-ratio:1;border-radius:0;scroll-snap-align:start}
+ .dots{display:flex;justify-content:center;gap:6px;padding:12px 0 0}
+ .dots i{width:6px;height:6px;border-radius:50%;background:#ccc;transition:.2s}
+ .dots i.on{background:var(--ink);width:18px;border-radius:3px}
+ .info{position:static;padding:20px 16px 0}
+ h1{font-size:20px}
+ .buy{display:none}
+ .story{margin-top:56px}.story .in{grid-template-columns:1fr}.story .ph{height:300px}.story .tx{padding:40px 16px 48px}
+ footer{padding-bottom:96px}
+ .note{bottom:84px}
+ .sticky{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--ln);padding:10px 16px;gap:12px;align-items:center}
+ .sticky .pr{font-family:Anton;font-size:22px;line-height:1}
+ .sticky .pr small{display:block;font-family:"Noto Sans JP";font-size:11px;color:var(--sub);margin-top:4px}
+ .sticky .cart{height:50px}
+}
+</style>
+</head>
+<body>
+<div id="hd"></div>
+<div class="wrap">
+ <p class="bc" id="bc"></p>
+ <div class="main">
+  <div><div class="gal" id="gal"></div><div class="dots" id="dots"></div></div>
+  <div class="info" id="info"></div>
+ </div>
+</div>
+<section class="story"><div class="in"><div class="ph"><img id="stimg" src="" alt=""></div><div class="tx" id="story"></div></div></section>
+<section class="sec">
+ <div class="sh"><h2>Complete The Look<small>一緒に買われているもの</small></h2></div>
+ <div class="rail" id="rel"></div>
+</section>
+<div id="ft"></div>
+<div class="sticky" id="sticky"></div>
+
+<script src="site.js"></script>
+<script>
+chrome();
+var x = byId(new URLSearchParams(location.search).get('id')) || P[0];
+var team = x.cat === 'team';
+var cat = CAT[x.cat];
+document.title = 'STORE. ' + x.n;
+
+/* カテゴリごとの説明文(ダミー) */
+var STORY = {
+  shoes: ['WHY THIS SHOE', 'Quick First<br>Step.', '最初の一歩で抜く選手のための1足。前足部は薄く、床をつかむ感覚を残しています。', 'hero.jpg'],
+  wear: ['MADE TO MOVE', 'Built For<br>Practice.', '汗をかいてもまとわりつかない生地。洗濯を繰り返しても形が崩れにくい作りです。', 'wear_life.jpg'],
+  supporter: ['STAY ON COURT', 'Protect<br>Your Game.', 'ねんざ・突き指で練習を休まないために。動きを邪魔しない薄さで、締め付けは調整できます。', 'men.jpg'],
+  socks: ['FROM THE GROUND UP', 'Grip<br>Every Step.', 'バッシュの中で足が滑らないように、足裏にすべり止めとクッションを入れています。', 'women.jpg'],
+  team: ['FOR TEAMS', 'One Team.<br>One Look.', 'デザインを選んで、人数・サイズ・番号を表に書くだけ。見積もりは無料で、10着から作れます。', 'team.jpg']
+};
+var DESC = {
+  shoes: 'スピードで抜きたい選手向け。着地の衝撃をかかとで吸収します。体育館専用です(屋外で履くと底の減りが早くなります)。',
+  wear: '練習でも移動でも使える定番。洗濯機で洗えます。',
+  supporter: '練習中ずっと着けていても蒸れにくい素材。左右どちらにも使えます。',
+  socks: 'つま先とかかとを補強して、穴があきにくくしています。',
+  team: 'チームカラーを2色まで選べます。番号・名前の書体は5種類から。納期は注文確定から約3週間(仮)。'
+};
+
+document.getElementById('bc').innerHTML = '<a href="index.html">ホーム</a> ／ <a href="list.html?c=' + x.cat + '">' + cat.ja + '</a> ／ ' + x.n;
+
+/* 写真: 商品写真 + カテゴリの雰囲気写真 */
+/* 写真: 商品 → 雰囲気 → 同じカテゴリの他の商品(重複なし) */
+var pics = [x.img, STORY[x.cat][3]];
+P.forEach(function (y) { if (y.cat === x.cat && pics.indexOf(y.img) < 0) pics.push(y.img); });
+pics = pics.slice(0, 5);
+document.getElementById('gal').innerHTML = pics.map(function (id, i) {
+  return '<figure' + (i === 0 ? ' class="w"' : '') + '><img src="' + U(id, i === 0 ? 1600 : 900) + '" alt="">' + (i === 0 && x.t ? '<span class="badge">' + x.t + '</span>' : '') + '</figure>';
+}).join('');
+document.getElementById('dots').innerHTML = pics.map(function (_, i) { return '<i' + (i === 0 ? ' class="on"' : '') + '></i>'; }).join('');
+
+/* 右側 */
+var h = '<p class="brand">' + x.b + '</p><h1>' + x.n + '</h1><p class="price">' + yen(x.p) + (team ? '〜<small>1着あたり・税込</small>' : '<small>税込</small>') + '</p>';
+h += '<div class="tags">' + x.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
+if (!team) {
+  h += '<p class="lbl">カラー<em id="cn">' + x.c[0][0] + '</em></p><div class="colors">' + x.c.map(function (c, i) {
+    return '<button' + (i === 0 ? ' class="on"' : '') + ' data-n="' + c[0] + '" style="background:' + c[1] + '"></button>';
+  }).join('') + '</div>';
+  h += '<p class="lbl">サイズ<a href="#size">サイズの選び方</a></p><div class="sizes" id="sz">' + SZ[x.sz].map(function (s) {
+    var k = x.out.indexOf(s) > -1 ? ' class="out"' : x.few.indexOf(s) > -1 ? ' class="few"' : '';
+    return '<button' + k + '>' + s + '</button>';
+  }).join('') + '</div>';
+  if (x.out.length) h += '<p class="notify">在庫がないサイズは <a href="#">入荷したらお知らせ</a></p>';
+  h += '<div class="fit" id="size"><h3>サイズ感</h3><p>' + x.fit + '</p>' +
+    (x.w ? '<div class="meter"><div class="bar"><i style="left:' + x.w + '%"></i></div><div class="lb"><span>細め</span><span>ふつう</span><span>広め</span></div></div>' : '') + '</div>';
+  h += '<div class="buy"><button class="cart" data-cart>サイズを選んでください</button><button class="fav2">♡</button></div>';
+  h += '<p class="pay"><span>クレジットカード</span><span>PayPay</span><span>Apple Pay</span><span>(Square決済)</span></p>';
+  h += '<div class="perks"><div><b class="ac">今日発送</b>15時までのご注文</div><div><b>サイズ交換無料</b>未使用・○日以内</div><div><b>正規取扱店</b>メーカー直仕入れ</div></div>';
+} else {
+  h += '<div class="qform"><select><option>人数を選ぶ</option><option>10〜14人</option><option>15〜19人</option><option>20人以上</option></select>' +
+    '<input placeholder="チーム名"><input placeholder="希望の色(例:紺×オレンジ)"></div>';
+  h += '<div class="buy" style="display:flex"><button class="cart" id="quote">見積もりを相談する(無料)</button></div>';
+  h += '<p class="pay"><span>見積もり確定後に Square で支払い</span></p>';
+}
+h += '<details open><summary>' + (team ? 'できること' : 'この商品が向いている人') + '</summary><p class="dt">' + DESC[x.cat] + '</p></details>';
+h += '<details><summary>スペック</summary><dl class="spec"><dt>ブランド</dt><dd>' + x.b + '</dd><dt>カテゴリ</dt><dd>' + cat.ja + '</dd><dt>品番</dt><dd>XXX-' + x.id.toUpperCase() + '(仮)</dd><dt>素材</dt><dd>○○○(仮)</dd></dl></details>';
+h += '<details><summary>送料・お届け・交換</summary><p class="dt">¥8,800以上で送料無料(仮)。発送の翌日〜2日でお届けします。サイズが合わない場合は、未使用・到着から○日以内なら交換無料です。</p></details>';
+document.getElementById('info').innerHTML = h;
+
+/* 下の説明ブロック */
+var st = STORY[x.cat];
+document.getElementById('stimg').src = U(st[3], 1400);
+document.getElementById('story').innerHTML = '<p class="kick">' + st[0] + '</p><h2>' + st[1] + '</h2><p>' + st[2] + '</p>';
+
+/* 一緒に買われているもの: 別カテゴリ優先 */
+var rel = P.filter(function (y) { return y.id !== x.id && y.cat !== 'team' && (y.g === x.g || y.g === 'unisex' || x.g === 'unisex'); });
+rel.sort(function (a, b) { return (a.cat === x.cat) - (b.cat === x.cat); });
+document.getElementById('rel').innerHTML = rel.slice(0, 6).map(card).join('');
+
+document.getElementById('sticky').innerHTML = team
+  ? '<div class="pr">' + yen(x.p) + '〜<small>1着あたり</small></div><button class="cart" onclick="document.getElementById(\'quote\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">見積もりを相談する</button>'
+  : '<div class="pr">' + yen(x.p) + '<small id="ss">サイズ未選択</small></div><button class="cart" data-cart>サイズを選んでください</button>';
+
+/* 動き */
+var size = null, n = 0;
+document.querySelectorAll('#sz button').forEach(function (b) {
+  b.onclick = function () {
+    if (b.classList.contains('out')) return;
+    document.querySelectorAll('#sz button').forEach(function (y) { y.classList.remove('on'); });
+    b.classList.add('on'); size = b.textContent;
+    var ss = document.getElementById('ss'); if (ss) ss.textContent = size;
+    document.querySelectorAll('[data-cart]').forEach(function (c) { c.textContent = 'カートに入れる'; });
+  };
+});
+document.querySelectorAll('[data-cart]').forEach(function (c) {
+  c.onclick = function () {
+    if (!size) { document.getElementById('sz').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    n++; document.getElementById('cc').textContent = 'カート ' + n;
+    c.textContent = 'カートに追加しました ✓'; setTimeout(function () { c.textContent = 'カートに入れる'; }, 1600);
+  };
+});
+var q = document.getElementById('quote');
+if (q) q.onclick = function () { q.textContent = '受け付けました(サンプルのため送信されません)'; };
+document.querySelectorAll('.colors button').forEach(function (b) {
+  b.onclick = function () {
+    document.querySelectorAll('.colors button').forEach(function (y) { y.classList.remove('on'); });
+    b.classList.add('on'); document.getElementById('cn').textContent = b.dataset.n;
+  };
+});
+var g = document.getElementById('gal'), d = document.querySelectorAll('#dots i');
+g.addEventListener('scroll', function () {
+  var i = Math.round(g.scrollLeft / g.clientWidth);
+  d.forEach(function (y, k) { y.classList.toggle('on', k === i); });
+});
+reveal();
+</script>
+</body>
+</html>
